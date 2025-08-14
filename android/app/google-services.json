@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "579260236321",
+    "project_id": "qrcodeinventory-get",
+    "storage_bucket": "qrcodeinventory-get.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:579260236321:android:9c7b37204579f2e1da5960",
+        "android_client_info": {
+          "package_name": "com.nekoproject.inventory_qr_code"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxLKHQvrGlRcpIwuYh4uXQkFbMdptremA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

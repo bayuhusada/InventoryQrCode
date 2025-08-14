@@ -3,19 +3,29 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:inventory_qr_code/app/constant/colors.dart';
+import 'package:inventory_qr_code/app/controllers/auth_controller.dart';
 import 'package:inventory_qr_code/app/routes/app_pages.dart';
 
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
-  const LoginView({super.key});
+  LoginView({super.key});
+
+  final AuthController authC = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('LOGIN',style: TextStyle(color: greyColor),), centerTitle: true, backgroundColor: marronColor,),
+      appBar: AppBar(
+        title: const Text(
+          'LOGIN',
+          style: TextStyle(color: greyColor),
+        ),
+        centerTitle: true,
+        backgroundColor: marronColor,
+      ),
       body: Center(
         child: ListView(
-          
           padding: EdgeInsets.all(10),
           children: [
             TextField(
@@ -51,7 +61,7 @@ class LoginView extends GetView<LoginController> {
               ),
             ),
             SizedBox(height: 15),
-        
+
             Hero(
               tag: 'toProducts',
               child: ElevatedButton(
@@ -59,14 +69,33 @@ class LoginView extends GetView<LoginController> {
                   backgroundColor: redColor,
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(10)
-                  )
+                    borderRadius: BorderRadiusGeometry.circular(10),
+                  ),
                 ),
-                onPressed: () {
-                  Get.toNamed(Routes.PRODUCTS);
+                onPressed: () async {
+                  if (controller.isLoading.isFalse) {
+                    if(controller.emailC.text.isNotEmpty && controller.passwordC.text.isNotEmpty){
+
+                    controller.isLoading(true);
+                    Map<String, dynamic>  hasil = await authC.login(controller.emailC.text, controller.passwordC.text);
+                    controller.isLoading(false);
+
+                    if( hasil['error' == true] ?? false){
+                      Get.snackbar('Error', hasil['message']);
+                    }else {
+                      Get.offAllNamed(Routes.HOME);
+                    }
+                    } else {
+                     Get.snackbar('Error', 'Email Dan Password Tidak Boleh Kosong');
+                    }
+                  }
                 },
-                child: Text('Login', style: TextStyle(color: greyColor)
-                ,),
+                child: Obx(
+                  () => Text(
+                    controller.isLoading.isFalse ?'Login' : 'Loading...',
+                    style: TextStyle(color: greyColor),
+                  ),
+                ),
               ),
             ),
           ],
