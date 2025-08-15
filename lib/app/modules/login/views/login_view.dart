@@ -11,6 +11,7 @@ import '../controllers/login_controller.dart';
 class LoginView extends GetView<LoginController> {
   LoginView({super.key});
 
+
   final AuthController authC = Get.find<AuthController>();
 
   @override
@@ -80,8 +81,8 @@ class LoginView extends GetView<LoginController> {
                     Map<String, dynamic>  hasil = await authC.login(controller.emailC.text, controller.passwordC.text);
                     controller.isLoading(false);
 
-                    if( hasil['error' == true] ?? false){
-                      Get.snackbar('Error', hasil['message']);
+                    if( hasil['error'] == true){
+                      Get.snackbar('Error', hasil['messages']);
                     }else {
                       Get.offAllNamed(Routes.HOME);
                     }

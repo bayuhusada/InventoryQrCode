@@ -8,7 +8,6 @@ class LoginController extends GetxController {
   final TextEditingController passwordC = TextEditingController(
     text: 'admin123'
   );
-
   RxBool isHidden = true.obs;
   RxBool isLoading = false.obs;
 }

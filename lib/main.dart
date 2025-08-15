@@ -30,9 +30,7 @@ class MyApp extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: auth.authStateChanges(),
       builder: (context, snapAuth) {
-        if (snapAuth.connectionState == ConnectionState.waiting) {
-          return const LoadingPage();
-        }
+        if (snapAuth.connectionState == ConnectionState.waiting) return const LoadingPage();
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: "Inventory",

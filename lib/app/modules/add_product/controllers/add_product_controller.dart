@@ -1,23 +1,36 @@
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class AddProductController extends GetxController {
-  //TODO: Implement AddProductController
+final TextEditingController codeC = TextEditingController();
+final TextEditingController nameC = TextEditingController();
+final TextEditingController prizeC = TextEditingController();
+final TextEditingController qtyC = TextEditingController();
 
-  final count = 0.obs;
+RxBool isLoading = false.obs;
+
+}
+class CurrencyFormatter extends TextInputFormatter {
   @override
-  void onInit() {
-    super.onInit();
-  }
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Hilangkan semua karakter non-angka
+    String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+    if (newText.isEmpty) {
+      return newValue.copyWith(text: '');
+    }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
+    // Format jadi ribuan (2.000.000)
+    final formatted = NumberFormat.decimalPattern('id').format(int.parse(newText));
 
-  void increment() => count.value++;
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
 }

@@ -8,20 +8,43 @@ class AuthController extends GetxController {
 
   Future<Map<String, dynamic>> login(String email, String pass) async {
     try {
+      await auth.signInWithEmailAndPassword(
+      email: email,
+      password: pass,
+    );
       return {
         'error': false,
         'messages':'Berhasil Login'
       };
     } on FirebaseAuthException catch (e){
       return {
-        'error': false,
+        'error': true,
         'messages':'${e.message}'
       };
-    }
-    catch (e) {
+    } catch (e) {
       return {
         'error': true,
         'messages':'Tidak dapat Login'
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> logOut() async {
+    try {
+      await auth.signOut();
+      return {
+        'error': false,
+        'messages':'Berhasil LogOut'
+      };
+    } on FirebaseAuthException catch (e){
+      return {
+        'error': true,
+        'messages':'${e.message}'
+      };
+    } catch (e) {
+      return {
+        'error': true,
+        'messages':'Tidak dapat LogOut'
       };
     }
   }
