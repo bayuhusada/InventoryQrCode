@@ -6,11 +6,13 @@ import 'package:inventory_qr_code/app/constant/colors.dart';
 import 'package:inventory_qr_code/app/data/model/product_model.dart';
 import 'package:inventory_qr_code/app/routes/app_pages.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-
+import 'package:intl/intl.dart';
 import '../controllers/products_controller.dart';
 
 class ProductsView extends GetView<ProductsController> {
-  const ProductsView({super.key});
+  ProductsView({super.key});
+
+  final formatter = NumberFormat.decimalPattern('id');
   @override
   Widget build(BuildContext context) {
     return Hero(
@@ -26,7 +28,7 @@ class ProductsView extends GetView<ProductsController> {
         ),
         body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
           stream: controller.streamProduct(),
-          builder: (context,snapProduct) {
+          builder: (context, snapProduct) {
             if (snapProduct.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -34,7 +36,10 @@ class ProductsView extends GetView<ProductsController> {
             }
             if (snapProduct.data!.docs.isEmpty) {
               return Center(
-                child: Text("Tidak ada Produk", style: TextStyle(color: marronColor),),
+                child: Text(
+                  "Tidak ada Produk",
+                  style: TextStyle(color: marronColor),
+                ),
               );
             }
 
@@ -55,7 +60,7 @@ class ProductsView extends GetView<ProductsController> {
                   ),
                   child: InkWell(
                     onTap: () {
-                      Get.toNamed(Routes.DETAIL_PRODUCT);
+                      Get.toNamed(Routes.DETAIL_PRODUCT, arguments: product);
                     },
                     borderRadius: BorderRadius.circular(15),
                     child: Container(
@@ -67,10 +72,28 @@ class ProductsView extends GetView<ProductsController> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(product.code, style: TextStyle(color: marronColor, fontSize: 25, fontWeight: FontWeight.bold),),
-                                SizedBox(height: 5,),
-                                Text("${product.name}",style: TextStyle(color: redColor, fontSize: 20, fontWeight: FontWeight.bold),),
-                                Text("Harga: Rp.${product.prize.toString()}"),
+                                Text(
+                                  product.code,
+                                  style: const TextStyle(
+                                    color: marronColor,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "${product.name}",
+                                  style: TextStyle(
+                                    color: redColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "Harga: Rp. ${NumberFormat.decimalPattern('id').format(product.prize)}",
+                                ),
                                 Text("Jumlah: ${product.qty.toString()}"),
                               ],
                             ),
@@ -78,7 +101,11 @@ class ProductsView extends GetView<ProductsController> {
                           Container(
                             height: 50,
                             width: 50,
-                            child: QrImageView(data: '0000',size: 200.0, version: QrVersions.auto,),
+                            child: QrImageView(
+                              data: product.code,
+                              size: 200.0,
+                              version: QrVersions.auto,
+                            ),
                           ),
                         ],
                       ),
@@ -87,7 +114,7 @@ class ProductsView extends GetView<ProductsController> {
                 );
               },
             );
-          }
+          },
         ),
       ),
     );

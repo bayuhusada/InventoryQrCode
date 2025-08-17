@@ -11,7 +11,7 @@ class AddProductView extends GetView<AddProductController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AddProductView',style: TextStyle(color: greyColor),),
+        title: const Text('AddProduct',style: TextStyle(color: greyColor),),
         backgroundColor: redColor,
         centerTitle: true,
       ),
