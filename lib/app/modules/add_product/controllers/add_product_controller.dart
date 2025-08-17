@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,25 @@ final TextEditingController prizeC = TextEditingController();
 final TextEditingController qtyC = TextEditingController();
 
 RxBool isLoading = false.obs;
+FirebaseFirestore firestore = FirebaseFirestore.instance;
+Future<Map<String, dynamic>> addProduct (Map<String,dynamic> data) async {
+   try {
+      var hasil = await firestore.collection('products').add(data);
+      await firestore.collection('products').doc(hasil.id).update({
+        'productId': hasil.id
+      });
+
+      return {
+        'error': false,
+        'messages':'Berhasil Menambah Product'
+      };
+    } catch (e) {
+      return {
+        'error': true,
+        'messages':'Tidak Dapat Menambah Product'
+      };
+    }
+} 
 
 }
 class CurrencyFormatter extends TextInputFormatter {

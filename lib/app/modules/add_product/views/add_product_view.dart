@@ -27,8 +27,10 @@ class AddProductView extends GetView<AddProductController> {
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(height: 20,),
-            TextField(
+          SizedBox(
+            height: 20,
+          ),
+          TextField(
             autocorrect: false,
             controller: controller.nameC,
             keyboardType: TextInputType.text,
@@ -37,22 +39,24 @@ class AddProductView extends GetView<AddProductController> {
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(height: 20,),
-            TextField(
-              inputFormatters: [
-                CurrencyFormatter()
-              ],
+          SizedBox(
+            height: 20,
+          ),
+          TextField(
+            inputFormatters: [CurrencyFormatter()],
             autocorrect: false,
             controller: controller.prizeC,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: 'Harga',
-            prefixText: 'Rp.',
+              prefixText: 'Rp.',
               border: OutlineInputBorder(),
             ),
           ),
-           SizedBox(height: 20,),
-            TextField(
+          SizedBox(
+            height: 20,
+          ),
+          TextField(
             autocorrect: false,
             controller: controller.qtyC,
             keyboardType: TextInputType.number,
@@ -61,30 +65,53 @@ class AddProductView extends GetView<AddProductController> {
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: redColor,
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(10),
-                  ),
-                ),
-                onPressed: () async {
-                  // if (controller.isLoading.isFalse) {
-                  //   controller.isLoading(true);
-                  //   // Map<String, dynamic>  hasil = await authC.login(controller.emailC.text, controller.passwordC.text);
-                  //   controller.isLoading(false);
-
-                  // }
-                },
-                child: Obx(
-                  () => Text(
-                    controller.isLoading.isFalse ?'Tambah Produk' : 'Loading...',
-                    style: TextStyle(color: greyColor),
-                  ),
-                ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: redColor,
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadiusGeometry.circular(10),
               ),
+            ),
+            onPressed: () async {
+              if (controller.isLoading.isFalse) {
+                if (controller.codeC.text.isNotEmpty &&
+                    controller.nameC.text.isNotEmpty &&
+                    controller.prizeC.text.isNotEmpty &&
+                    controller.qtyC.text.isNotEmpty) {
+                  controller.isLoading(true);
+                  String hargaUntukDB = controller.prizeC.text.replaceAll(
+                    '.',
+                    '',
+                  );
+                  int hargaInt = int.tryParse(hargaUntukDB) ?? 0;
+                  Map<String, dynamic> hasil = await controller.addProduct({
+                    'code': controller.codeC.text,
+                    'name': controller.nameC.text,
+                    'prize': hargaInt,
+                    'qty': int.tryParse(controller.qtyC.text) ?? 0,
+                  });
+                  controller.isLoading(false);
+                  Get.back();
+                  Get.snackbar(
+                    hasil['error'] == true ? "Error" : 'Success',
+                    hasil['messages'],
+                  );
+                } else {
+                  Get.snackbar("Error", 'Data tidak boleh kosong!');
+                }
+              }
+            },
+            child: Obx(
+              () => Text(
+                controller.isLoading.isFalse ? 'Tambah Produk' : 'Loading...',
+                style: TextStyle(color: greyColor),
+              ),
+            ),
+          ),
         ],
       ),
     );
