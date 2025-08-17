@@ -20,7 +20,7 @@ class ProductsView extends GetView<ProductsController> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'ProductsView',
+            'Products',
             style: TextStyle(color: greyColor),
           ),
           backgroundColor: marronColor,

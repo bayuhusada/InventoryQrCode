@@ -12,6 +12,7 @@ final TextEditingController prizeC = TextEditingController();
 final TextEditingController qtyC = TextEditingController();
 
 RxBool isLoading = false.obs;
+RxBool isLoadingDelete = false.obs;
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 Future<Map<String, dynamic>> editProduct (Map<String,dynamic> data) async {
@@ -30,6 +31,21 @@ Future<Map<String, dynamic>> editProduct (Map<String,dynamic> data) async {
       return {
         'error': true,
         'messages':'Gagal Update Product'
+      };
+    }
+} 
+Future<Map<String, dynamic>> deleteProduct (String id) async {
+   try {
+      await firestore.collection('products').doc(id).delete();
+
+      return {
+        'error': false,
+        'messages':'Berhasil Menghapus Product'
+      };
+    } catch (e) {
+      return {
+        'error': true,
+        'messages':'Gagal Menghapus Product'
       };
     }
 } 

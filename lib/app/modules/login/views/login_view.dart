@@ -19,7 +19,7 @@ class LoginView extends GetView<LoginController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'LOGIN',
+          'Login',
           style: TextStyle(color: greyColor),
         ),
         centerTitle: true,

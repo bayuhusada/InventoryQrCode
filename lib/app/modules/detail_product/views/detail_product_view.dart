@@ -24,7 +24,10 @@ class DetailProductView extends GetView<DetailProductController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('DetailProduct', style: TextStyle(color: greyColor),),
+        title: const Text(
+          'DetailProduct',
+          style: TextStyle(color: greyColor),
+        ),
         backgroundColor: marronColor,
         centerTitle: true,
       ),
@@ -100,14 +103,6 @@ class DetailProductView extends GetView<DetailProductController> {
           SizedBox(
             height: 20,
           ),
-          TextButton(
-
-            onPressed: () {},
-            child: Text('Hapus', style: TextStyle(color: marronColor),),
-          ),
-          SizedBox(
-            height: 20,
-          ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: marronColor,
@@ -139,7 +134,6 @@ class DetailProductView extends GetView<DetailProductController> {
                     hasil['error'] == true ? "Error" : 'Success',
                     hasil['messages'],
                   );
-                  controller.isLoading(false);
                 } else {
                   Get.snackbar('Error', 'Data tidak boleh kosong');
                 }
@@ -150,6 +144,66 @@ class DetailProductView extends GetView<DetailProductController> {
                 controller.isLoading.isFalse ? 'Edit Produk' : 'Loading...',
                 style: TextStyle(color: greyColor),
               ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextButton(
+            onPressed: () {
+              Get.defaultDialog(
+                title: 'Delete Product',
+                middleText: 'Yakin ingin hapus produk ini?',
+                actions: [
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: marronColor),
+                    ),
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: const Text(
+                      'CANCEL',
+                      style: TextStyle(color: marronColor),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: marronColor,
+                    ),
+                  onPressed: () async {
+                    controller.isLoadingDelete(true);
+                    Map<String, dynamic> hasil = await controller.deleteProduct(product.productId);
+                    controller.isLoadingDelete(false);
+
+                    Get.back();
+                    Get.back();
+                    Get.snackbar(
+                      hasil['error'] == true ? "Error" : 'Success',
+                      hasil['messages'],
+                    );
+                  },
+                    child: Obx(
+                      () =>  controller.isLoadingDelete.isFalse ? const Text(
+                      'HAPUS',
+                        style: TextStyle(color: greyColor) ,
+                      ): Container(
+                        padding: const EdgeInsets.all(2),
+                        height: 20,
+                        width: 20,
+                        child: const CircularProgressIndicator(
+                          color: peachColor,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    ),
+                  ),
+                ],
+              );
+            },
+            child: Text(
+              'Hapus',
+              style: TextStyle(color: marronColor),
             ),
           ),
         ],
