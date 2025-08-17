@@ -72,13 +72,15 @@ class HomeView extends GetView<HomeController> {
             case 3:
               tittle = 'Catalog';
               icon = Icons.print_rounded;
-              onTap = () {};
+              onTap = () {
+                controller.downloadCatalog();
+              };
               break;
             default:
               tittle = 'Unknown';
               icon = Icons.help_outline;
           }
-           return Material(
+          return Material(
             color: peachColor,
             borderRadius: BorderRadius.circular(10),
             child: InkWell(
