@@ -10,6 +10,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/products/bindings/products_binding.dart';
 import '../modules/products/views/products_view.dart';
+import '../modules/scan_page/bindings/scan_page_binding.dart';
+import '../modules/scan_page/views/scan_page_view.dart';
 
 part 'app_routes.dart';
 
@@ -43,6 +45,11 @@ class AppPages {
       name: _Paths.DETAIL_PRODUCT,
       page: () => DetailProductView(),
       binding: DetailProductBinding(),
+    ),
+    GetPage(
+      name: _Paths.SCAN_PAGE,
+      page: () => const ScanPageView(),
+      binding: ScanPageBinding(),
     ),
   ];
 }

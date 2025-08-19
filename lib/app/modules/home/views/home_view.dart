@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inventory_qr_code/app/constant/colors.dart';
 import 'package:inventory_qr_code/app/controllers/auth_controller.dart';
-import 'package:inventory_qr_code/app/modules/scan_page/scan_page.dart';
+import 'package:inventory_qr_code/app/modules/scan_page/views/scan_page_view.dart';
 import 'package:inventory_qr_code/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
@@ -70,7 +70,7 @@ class HomeView extends GetView<HomeController> {
               icon = Icons.qr_code_scanner_rounded;
               onTap = () async {
                 // buka halaman scanner
-                final barcode = await Get.to(() => const ScanPage());
+                final barcode = await Get.to(() => const ScanPageView());
 
                 if (barcode != null) {
                   Map<String, dynamic> hasil = await controller.getProductById(
