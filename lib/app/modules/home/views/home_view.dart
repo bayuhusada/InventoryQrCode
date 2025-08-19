@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inventory_qr_code/app/constant/colors.dart';
 import 'package:inventory_qr_code/app/controllers/auth_controller.dart';
+import 'package:inventory_qr_code/app/modules/scan_page/scan_page.dart';
 import 'package:inventory_qr_code/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
@@ -67,7 +68,35 @@ class HomeView extends GetView<HomeController> {
             case 2:
               tittle = 'Scan QR';
               icon = Icons.qr_code_scanner_rounded;
-              onTap = () {};
+              onTap = () async {
+                // buka halaman scanner
+                final barcode = await Get.to(() => const ScanPage());
+
+                if (barcode != null) {
+                  Map<String, dynamic> hasil = await controller.getProductById(
+                    barcode,
+                  );
+
+                  if (hasil['error'] == false) {
+                    Get.toNamed(
+                      Routes.DETAIL_PRODUCT,
+                      arguments: hasil['data'],
+                    );
+                  } else {
+                    Get.snackbar(
+                      'Error',
+                      hasil['messages'],
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                  }
+                } else {
+                  Get.snackbar(
+                    'Info',
+                    'Scan dibatalkan',
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
+                }
+              };
               break;
             case 3:
               tittle = 'Catalog';
